@@ -1,0 +1,28 @@
+#include "resource.h"
+#include <windows.h>
+#include <afxres.h>
+
+IDR_MAINFRAME ICON "res\\MfcHarness.ico"
+
+IDD_MFCHARNESS_DIALOG DIALOGEX 0, 0, 420, 260
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "MFC DLL Harness"
+FONT 9, "Segoe UI", 0, 0, 0x0
+BEGIN
+    LTEXT           "DLL Path",IDC_STATIC,10,10,60,8
+    EDITTEXT        IDC_EDIT_DLL_PATH,10,22,310,14,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Browse...",IDC_BUTTON_BROWSE_DLL,330,20,70,14
+
+    LTEXT           "Process Filter (name or PID)",IDC_STATIC_FILTER_LABEL,10,44,160,8
+    EDITTEXT        IDC_EDIT_PROCESS_FILTER,10,56,160,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Refresh",IDC_BUTTON_REFRESH,180,56,80,14
+
+    LTEXT           "Injectable Processes (double-click to select)",IDC_STATIC,10,76,230,8
+    CONTROL         "",IDC_LIST_PROCESSES,"SysListView32",LVS_REPORT | LVS_SINGLESEL | WS_BORDER | WS_TABSTOP,10,88,390,100
+
+    LTEXT           "Event Timeline",IDC_STATIC,10,192,100,8
+    LISTBOX         IDC_LIST_EVENTS,10,204,390,50,LBS_NOTIFY | WS_VSCROLL | WS_BORDER
+
+    PUSHBUTTON      "Inject DLL",IDC_BUTTON_INJECT,310,56,90,14
+    LTEXT           "Lab use only ¡ª log build register before operations.",IDC_STATIC_ARCH_HINT,10,258,320,8
+END

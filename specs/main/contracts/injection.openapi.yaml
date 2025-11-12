@@ -1,0 +1,132 @@
+﻿openapi: 3.0.3
+info:
+  title: MFC DLL Harness Control Surface
+  version: 0.1.0
+servers:
+  - url: http://localhost:58888
+    description: Local-only loopback listener started by test harness
+components:
+  schemas:
+    SelectDllRequest:
+      type: object
+      required: [path]
+      properties:
+        path:
+          type: string
+          description: Absolute path to the DLL built inside lab
+    ProcessSummary:
+      type: object
+      properties:
+        pid:
+          type: integer
+          format: int64
+        name:
+          type: string
+        architecture:
+          type: string
+          enum: [x86, x64]
+        injectable:
+          type: boolean
+    InjectRequest:
+      type: object
+      required: [pid]
+      properties:
+        pid:
+          type: integer
+          format: int64
+        architecture:
+          type: string
+          enum: [x86, x64]
+        killSwitchOnExit:
+          type: boolean
+          default: true
+    InjectResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [HiddenVerified, Failed]
+        hiddenProcessCount:
+          type: integer
+        hiddenFileCount:
+          type: integer
+    KillSwitchRequest:
+      type: object
+      required: [sessionId]
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+    KillSwitchResponse:
+      type: object
+      properties:
+        restored:
+          type: boolean
+        elapsedMs:
+          type: integer
+paths:
+  /dll:
+    post:
+      summary: Select DLL for upcoming session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectDllRequest'
+      responses:
+        '204':
+          description: DLL path accepted and hashed
+        '400':
+          description: DLL missing from build register
+  /processes:
+    get:
+      summary: List injectable processes detected by harness
+      responses:
+        '200':
+          description: Collection of candidate processes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessSummary'
+  /inject:
+    post:
+      summary: Inject DLL into target process
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InjectRequest'
+      responses:
+        '200':
+          description: Injection completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InjectResponse'
+        '409':
+          description: Architecture mismatch or process exited
+  /killswitch:
+    post:
+      summary: Roll back hooks and restore visibility
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KillSwitchRequest'
+      responses:
+        '200':
+          description: Hooks removed and state restored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KillSwitchResponse'
+        '504':
+          description: Restoration exceeded 5-second SLA

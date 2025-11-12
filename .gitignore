@@ -1,0 +1,25 @@
+﻿# Visual Studio 缓存和用户设置
+.vs/
+*.suo
+*.user
+*.sln.docstates
+
+# 编译输出目录
+**/Win32/
+**/[Oo]bj/
+**/[Bb]in/
+**/ARM/
+**/ARM64/
+
+# 缓存文件 (导致您出错的元凶)
+*.pch
+*.ipch
+
+# 其他编译和链接器文件
+*.pdb
+*.idb
+*.ilk
+*.aps
+*.ncb
+*.tlog
+*.log

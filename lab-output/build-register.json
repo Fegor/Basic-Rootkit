@@ -1,0 +1,42 @@
+﻿[
+    {
+        "artifact":  "Source\\MfcHarness\\Release\\MfcHarness.exe",
+        "configuration":  "Release",
+        "platform":  "x86",
+        "semver":  "0.1.0-dev",
+        "gitCommit":  "4004dc4d1059d2836ca6d7df4defca4da0a3f330",
+        "gitStatus":  "dirty",
+        "sha256":  "7D0C835B86007143A8B2F7893E59ECA926AF2C4A184339A783D0AFB2792F8DCD",
+        "buildTimeUtc":  "2025-11-10T06:05:30.8883088Z"
+    },
+    {
+        "artifact":  "Source\\Release\\Basic Rootkit.dll",
+        "configuration":  "Release",
+        "platform":  "x86",
+        "semver":  "0.1.0-dev",
+        "gitCommit":  "4004dc4d1059d2836ca6d7df4defca4da0a3f330",
+        "gitStatus":  "dirty",
+        "sha256":  "41649A159AEC60DE632657B490F1F7E0EB88ED4ADF108EB7AE5E00E12B0EB344",
+        "buildTimeUtc":  "2025-11-10T06:05:30.9037497Z"
+    },
+    {
+        "artifact":  "Source\\MfcHarness\\x64\\Release\\MfcHarness.exe",
+        "configuration":  "Release",
+        "platform":  "x64",
+        "semver":  "0.1.0-dev",
+        "gitCommit":  "4004dc4d1059d2836ca6d7df4defca4da0a3f330",
+        "gitStatus":  "dirty",
+        "sha256":  "9E20CAFB9EE0918DEA611CE48FF3B20FD4898304F7679151EF72FF29F44F99CD",
+        "buildTimeUtc":  "2025-11-10T06:05:59.2840056Z"
+    },
+    {
+        "artifact":  "Source\\x64\\Release\\Basic Rootkit.dll",
+        "configuration":  "Release",
+        "platform":  "x64",
+        "semver":  "0.1.0-dev",
+        "gitCommit":  "4004dc4d1059d2836ca6d7df4defca4da0a3f330",
+        "gitStatus":  "dirty",
+        "sha256":  "BAB33FCCBF6DAC5F5DF77ABB59005A821E58DCC41676D61258468184E871CBCC",
+        "buildTimeUtc":  "2025-11-10T06:05:59.2924257Z"
+    }
+]

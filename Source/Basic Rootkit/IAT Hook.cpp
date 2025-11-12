@@ -1,4 +1,4 @@
-#include "IAT Hook.h"
+﻿#include "IAT Hook.h"
 
 #include <TlHelp32.h>
 #include <Psapi.h>
@@ -11,40 +11,47 @@
  */
 LPVOID IAT::GetCurrentProcessModule()
 {
-	char lpCurrentModuleName[MAX_PATH];
+	// ✅ 正确声明：WCHAR 数组，不是指针数组
+	WCHAR lpImageName[MAX_PATH];
 
-	char lpImageName[MAX_PATH];
+	// ✅ 使用 Unicode 版本
+	GetProcessImageFileNameW(GetCurrentProcess(), lpImageName, MAX_PATH);
 
-	GetProcessImageFileNameA(GetCurrentProcess(), lpImageName, MAX_PATH);
-
-	MODULEENTRY32 ModuleList{};
-	ModuleList.dwSize = sizeof(ModuleList);
+	// ✅ 只定义一次，使用 W 版本
+	MODULEENTRY32W ModuleList{};
+	ModuleList.dwSize = sizeof(MODULEENTRY32W);
 
 	const HANDLE hProcList = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, 0);
 	if (hProcList == INVALID_HANDLE_VALUE)
 		return nullptr;
 
-	if (!Module32First(hProcList, &ModuleList))
-		return nullptr;
-
-	wcstombs_s(nullptr, lpCurrentModuleName, ModuleList.szModule, MAX_PATH);
-	lpCurrentModuleName[MAX_PATH - 1] = '\0';
-
-	if (StrStrIA(lpImageName, lpCurrentModuleName) != nullptr)
-		return ModuleList.hModule;
-
-	while (Module32Next(hProcList, &ModuleList))
+	// ✅ 使用 W 版本
+	if (!Module32FirstW(hProcList, &ModuleList))
 	{
-		wcstombs_s(nullptr, lpCurrentModuleName, ModuleList.szModule, MAX_PATH);
-		lpCurrentModuleName[MAX_PATH - 1] = '\0';
-
-		if (StrStrIA(lpImageName, lpCurrentModuleName) != nullptr)
-			return ModuleList.hModule;
+		CloseHandle(hProcList);
+		return nullptr;
 	}
 
+	// ✅ 第一个模块检查
+	if (StrStrIW(ModuleList.szModule, lpImageName) != nullptr)
+	{
+		CloseHandle(hProcList);
+		return ModuleList.hModule;
+	}
+
+	// ✅ 注意括号和参数顺序
+	while (Module32NextW(hProcList, &ModuleList))
+	{
+		if (StrStrIW(ModuleList.szModule, lpImageName) != nullptr)
+		{
+			CloseHandle(hProcList);
+			return ModuleList.hModule;
+		}
+	}
+
+	CloseHandle(hProcList);
 	return nullptr;
 }
-
 /**
  * Function to hook functions in the IAT of a specified module.
  * \param lpModuleName : name of the module wich contains the function you want to hook.

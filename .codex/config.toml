@@ -1,5 +1,10 @@
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
 [projects.'\\?\C:\Users\Jeff\Documents\GitHub\Basic-Rootkit']
 trust_level = "trusted"
 
 [projects.'\\?\C:\Users\Jeff\Documents\GitHub\Basic-Rootkit - Copy']
+trust_level = "trusted"
+
+[projects.'\\?\C:\Users\Jeff\Documents\GitHub\RemotePC']
 trust_level = "trusted"
